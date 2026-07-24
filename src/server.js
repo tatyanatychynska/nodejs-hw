@@ -2,11 +2,14 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import {errors} from 'celebrate';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { logger } from './middleware/logger.js';
 import notesRoutes from './routes/notesRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+
 import { connectMongoDB } from './db/connectMongoDB.js';
 
 const app = express();
@@ -18,12 +21,14 @@ app.use(
   }),
 );
 app.use(helmet());
-
+app.use(cookieParser());
 app.use(express.json());
+
 
 app.use(logger);
 
 app.use(notesRoutes);
+app.use(authRoutes);
 
 app.use(notFoundHandler);
 
